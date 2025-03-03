@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://bml1jaa41of2w"]
+[gd_scene load_steps=7 format=3 uid="uid://bml1jaa41of2w"]
 
 [ext_resource type="FontFile" uid="uid://4eu5c4eagiw8" path="res://assets/fonts/BRADHITC.TTF" id="1_6a7nv"]
+[ext_resource type="Script" path="res://scripts/home.gd" id="1_f4tvi"]
 [ext_resource type="Script" path="res://scripts/start_button.gd" id="2_ctoy5"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_b0khs"]
@@ -17,6 +18,7 @@ font = ExtResource("1_6a7nv")
 font_size = 30
 
 [node name="Home" type="Node2D"]
+script = ExtResource("1_f4tvi")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

@@ -10,5 +10,6 @@ export_presets.cfg
 dist/
 
 mai*.tmp
+mus*.tmp
 
 .vscode/

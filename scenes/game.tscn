@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://cv410edaw7upu"]
+[gd_scene load_steps=17 format=3 uid="uid://cv410edaw7upu"]
 
 [ext_resource type="Script" path="res://scripts/hero.gd" id="1_a35pp"]
 [ext_resource type="Texture2D" uid="uid://c0afosm6y3d5u" path="res://assets/images/hero.png" id="1_k7grp"]
@@ -6,6 +6,8 @@
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_rs0e5"]
 [ext_resource type="Script" path="res://scripts/hero_animation.gd" id="3_f7prn"]
 [ext_resource type="FontFile" uid="uid://4eu5c4eagiw8" path="res://assets/fonts/BRADHITC.TTF" id="6_yhftg"]
+[ext_resource type="AudioStream" uid="uid://xuthrn46xf22" path="res://assets/sounds/ding.mp3" id="7_6wtm6"]
+[ext_resource type="AudioStream" uid="uid://duyvacjpb1x3r" path="res://assets/sounds/explode.wav" id="8_o3245"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6v2b0"]
 radius = 41.0122
@@ -47,6 +49,10 @@ font_size = 90
 font = ExtResource("6_yhftg")
 font_size = 50
 
+[sub_resource type="LabelSettings" id="LabelSettings_l7bab"]
+font = ExtResource("6_yhftg")
+font_size = 41
+
 [node name="Game" type="Node2D"]
 script = ExtResource("1_rs0e5")
 
@@ -55,7 +61,7 @@ script = ExtResource("1_rs0e5")
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
 offset_right = 1919.0
 offset_bottom = 1081.0
-color = Color(0.125911, 0.125911, 0.125911, 1)
+color = Color(0, 0, 0, 1)
 metadata/_edit_lock_ = true
 
 [node name="Line2D" type="Line2D" parent="CanvasLayer"]
@@ -106,5 +112,44 @@ label_settings = SubResource("LabelSettings_qdfs5")
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
+
+[node name="GameDataUI" type="Node2D" parent="CanvasLayer"]
+
+[node name="Text" type="Label" parent="CanvasLayer/GameDataUI"]
+offset_left = 53.0
+offset_top = 47.0
+offset_right = 303.0
+offset_bottom = 131.0
+text = "零件收集："
+label_settings = SubResource("LabelSettings_l7bab")
+metadata/_edit_lock_ = true
+
+[node name="PartCount" type="Label" parent="CanvasLayer/GameDataUI"]
+offset_left = 253.0
+offset_top = 53.0
+offset_right = 560.0
+offset_bottom = 137.0
+text = "0/100"
+label_settings = SubResource("LabelSettings_l7bab")
+
+[node name="Debug" type="Label" parent="CanvasLayer/GameDataUI"]
+offset_left = 53.0
+offset_top = 118.0
+offset_right = 459.0
+offset_bottom = 189.0
+text = "game_data"
+
+[node name="Sounds" type="Node2D" parent="."]
+
+[node name="Collect" type="AudioStreamPlayer2D" parent="Sounds"]
+stream = ExtResource("7_6wtm6")
+volume_db = 4.27
+attenuation = 0.0915054
+max_polyphony = 10
+
+[node name="Collide" type="AudioStreamPlayer2D" parent="Sounds"]
+stream = ExtResource("8_o3245")
+volume_db = 7.625
+attenuation = 0.064704
 
 [connection signal="pressed" from="CanvasLayer/GameOverFrame/Button" to="." method="_on_button_pressed"]

@@ -5,59 +5,110 @@ extends Node2D
 
 var stone_scene = preload("res://scenes/stone.tscn")
 var explode_scene = preload("res://scenes/explode.tscn")
+var part_scene = preload("res://scenes/part.tscn")
 
 enum GameState {
 	PLAYING,
 	GAME_OVER
 }
 
-var game_state = GameState.PLAYING
+
+var game_data = {
+	"collect_count": 0,
+	"stage": GameState.PLAYING,
+	"hard": 0.0,  # 当前难度系数，0~1
+}
 
 func _ready() -> void:
 	print("ready")
-	game_state = GameState.PLAYING
+	game_data["stage"] = GameState.PLAYING
 	# 一开始还看不到结束标志
 	$CanvasLayer/GameOverFrame.visible = false
 	pass
 
 func _physics_process(_delta: float) -> void:
 	# 每时每秒都向舞台添加陨石
-	#print(hero.position)
 	generate_stone()
+	generate_part()
 	pass
+
+func _clear_all_entity() -> void:
+	# 清理所有在场陨石
+	var stone_group = get_tree().get_nodes_in_group("stone_group")
+	for stone in stone_group:
+		stone.queue_free()
+	var part_group = get_tree().get_nodes_in_group("part_group")
+	for part in part_group:
+		part.queue_free()
 
 func game_over(dead_position: Vector2):
 	print("game_over!", dead_position)
-	game_state = GameState.GAME_OVER
+	game_data["stage"] = GameState.GAME_OVER
 	# 创造一个爆炸
 	var explode = explode_scene.instantiate()
 	explode.position = dead_position
 	canvas.add_child(explode)
 	
-	# 清理所有在场陨石
-	var stone_group = get_tree().get_nodes_in_group("stone_group")
-	for stone in stone_group:
-		stone.queue_free()
+	$Sounds/Collide.play()
+	
+	_clear_all_entity()
 	# 显示结束画面
 	$CanvasLayer/GameOverFrame.visible = true
 
+func collect_part(collect_position: Vector2):
+	print("collect!")
+	game_data["collect_count"] += 1
+	game_data["hard"] = game_data["collect_count"] / 100.0  # 必须写成小数，否则结果会转换成整数
+	$CanvasLayer/GameDataUI/Debug.text = str(game_data)
+	# sound
+	$Sounds/Collect.pitch_scale = randf_range(0.6, 1.5)
+	$Sounds/Collect.play()
+	# 更新UI
+	$CanvasLayer/GameDataUI/PartCount.text = str(game_data["collect_count"]) + "/100"
+	if game_data["collect_count"] >= 100:
+		print("congratulation!")
+		_clear_all_entity()
+	pass
+
 func generate_stone():
-	if game_state != GameState.PLAYING:
+	if game_data["stage"] != GameState.PLAYING:
 		return
-	if randf() > 0.05:
+	# 出现率随难度系数的增加而增加
+	var rate = 0.001 + game_data["hard"] * 0.05
+	if !(randf() < rate):
 		return
 	var stone = stone_scene.instantiate()
 	stone.add_to_group("stone_group")
 	canvas.add_child(stone)
 	stone.connect("hero_collide_with_stone_signal", Callable(self, "game_over"))
+	
 	stone.position = get_random_edge_position()
 	# 计算朝向英雄的方向
 	var direction = (hero.position - stone.position).normalized()
 	
 	# 设置陨石速度
-	stone.speed = direction * randf_range(100, 500)
+	var speed_random_mid = game_data["hard"] * 400 + 100
+	stone.speed = direction * randf_range(
+		speed_random_mid - 50, 
+		speed_random_mid + 50
+		)
 	stone.scale *= randf_range(0.2, 2)
 	pass
+
+func generate_part():
+	if game_data["stage"] != GameState.PLAYING:
+		return
+	var rate = 0.05 + (-0.04) * game_data["hard"]  # 难度系数越高，越少生成
+	if !(randf() < rate):
+		return
+	var part = part_scene.instantiate()
+	part.position = get_random_edge_position()
+	part.connect("hero_collide_with_part_signal", Callable(self, "collect_part"))
+	canvas.add_child(part)
+	part.add_to_group("part_group")
+	var direction = (hero.position - part.position).normalized()
+	part.speed = direction * randf_range(100, 500)
+
 
 func get_random_edge_position() -> Vector2:
 	# 设置陨石生成位置在屏幕外的随机边缘
