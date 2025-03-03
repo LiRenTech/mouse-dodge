@@ -73,6 +73,7 @@ func collect_part(collect_position: Vector2):
 	if game_data["collect_count"] >= 100:
 		print("congratulation!")
 		_clear_all_entity()
+		get_tree().change_scene_to_file("res://scenes/win.tscn")
 	pass
 
 
