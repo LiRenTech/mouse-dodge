@@ -1,0 +1,69 @@
+[gd_scene load_steps=6 format=3 uid="uid://bml1jaa41of2w"]
+
+[ext_resource type="FontFile" uid="uid://4eu5c4eagiw8" path="res://assets/fonts/BRADHITC.TTF" id="1_6a7nv"]
+[ext_resource type="Script" path="res://scripts/start_button.gd" id="2_ctoy5"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_b0khs"]
+font = ExtResource("1_6a7nv")
+font_size = 90
+font_color = Color(0.884099, 0.884099, 0.884099, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_sueof"]
+font = ExtResource("1_6a7nv")
+font_size = 60
+
+[sub_resource type="LabelSettings" id="LabelSettings_2m84v"]
+font = ExtResource("1_6a7nv")
+font_size = 30
+
+[node name="Home" type="Node2D"]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Background" type="ColorRect" parent="CanvasLayer"]
+offset_right = 1920.0
+offset_bottom = 1079.0
+color = Color(0.114897, 0.114897, 0.114897, 1)
+metadata/_edit_lock_ = true
+
+[node name="MainTitle" type="Label" parent="CanvasLayer"]
+offset_left = 433.0
+offset_top = 93.0
+offset_right = 1518.0
+offset_bottom = 255.0
+text = "Mouse Dodge"
+label_settings = SubResource("LabelSettings_b0khs")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StartButton" type="Button" parent="CanvasLayer"]
+offset_left = 832.0
+offset_top = 523.0
+offset_right = 1154.0
+offset_bottom = 617.0
+icon_alignment = 1
+script = ExtResource("2_ctoy5")
+
+[node name="Label" type="Label" parent="CanvasLayer/StartButton"]
+layout_mode = 0
+offset_left = 40.0
+offset_right = 300.0
+offset_bottom = 85.0
+text = "start!"
+label_settings = SubResource("LabelSettings_sueof")
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+offset_left = 1563.0
+offset_top = 963.0
+offset_right = 1886.0
+offset_bottom = 1059.0
+text = "by lirenTech
+2025.3"
+label_settings = SubResource("LabelSettings_2m84v")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[connection signal="pressed" from="CanvasLayer/StartButton" to="CanvasLayer/StartButton" method="_on_button_pressed"]
