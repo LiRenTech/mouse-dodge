@@ -6,6 +6,7 @@ extends Node2D
 var stone_scene = preload("res://scenes/stone.tscn")
 var explode_scene = preload("res://scenes/explode.tscn")
 var part_scene = preload("res://scenes/part.tscn")
+var boots_scene = preload("res://scenes/boots.tscn")
 
 enum GameState {
 	PLAYING,
@@ -30,6 +31,7 @@ func _physics_process(_delta: float) -> void:
 	# 每时每秒都向舞台添加陨石
 	generate_stone()
 	generate_part()
+	generate_boots()
 	pass
 
 func _clear_all_entity() -> void:
@@ -40,6 +42,9 @@ func _clear_all_entity() -> void:
 	var part_group = get_tree().get_nodes_in_group("part_group")
 	for part in part_group:
 		part.queue_free()
+	var boots_group = get_tree().get_nodes_in_group("boots_group")
+	for boots in boots_group:
+		boots.queue_free()
 
 func game_over(dead_position: Vector2):
 	print("game_over!", dead_position)
@@ -70,6 +75,11 @@ func collect_part(collect_position: Vector2):
 		_clear_all_entity()
 	pass
 
+
+func add_speed(collect_position: Vector2):
+	print("add_speed!")
+	hero.speed_size += 1
+
 func generate_stone():
 	if game_data["stage"] != GameState.PLAYING:
 		return
@@ -82,7 +92,7 @@ func generate_stone():
 	canvas.add_child(stone)
 	stone.connect("hero_collide_with_stone_signal", Callable(self, "game_over"))
 	
-	stone.position = get_random_edge_position()
+	stone.position = get_random_edge_position(50)
 	# 计算朝向英雄的方向
 	var direction = (hero.position - stone.position).normalized()
 	
@@ -109,11 +119,24 @@ func generate_part():
 	var direction = (hero.position - part.position).normalized()
 	part.speed = direction * randf_range(100, 500)
 
+func generate_boots():
+	if game_data["stage"] != GameState.PLAYING:
+		return
+	var rate = 0.005
+	if !(randf() < rate):
+		return
+	var boots = boots_scene.instantiate()
+	boots.position = get_random_edge_position()
+	boots.connect("hero_collide_with_boots_signal", Callable(self, "add_speed"))
+	canvas.add_child(boots)
+	boots.add_to_group("boots_group")
+	var direction = (hero.position - boots.position).normalized()
+	boots.speed = direction * randf_range(50, 100)
 
-func get_random_edge_position() -> Vector2:
+
+func get_random_edge_position(margin: int = 0) -> Vector2:
 	# 设置陨石生成位置在屏幕外的随机边缘
 	var viewport_rect = get_viewport().get_visible_rect()
-	var margin = 0  # 屏幕外间距
 	var edge = randi() % 4  # 随机选择四个边
 	
 	var spawn_pos = Vector2()

@@ -1,0 +1,46 @@
+[gd_scene load_steps=4 format=3 uid="uid://7v0hent0n3x4"]
+
+[ext_resource type="FontFile" uid="uid://4eu5c4eagiw8" path="res://assets/fonts/BRADHITC.TTF" id="1_wrtuy"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_2j25f"]
+font = ExtResource("1_wrtuy")
+font_size = 100
+
+[sub_resource type="LabelSettings" id="LabelSettings_eqex4"]
+font = ExtResource("1_wrtuy")
+font_size = 50
+
+[node name="Win" type="Node2D"]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(0, 0, 0, 1)
+metadata/_edit_lock_ = true
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+offset_left = 683.0
+offset_top = 235.0
+offset_right = 1271.0
+offset_bottom = 427.0
+text = "You Win"
+label_settings = SubResource("LabelSettings_2j25f")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="CanvasLayer"]
+offset_left = 809.0
+offset_top = 464.0
+offset_right = 1158.0
+offset_bottom = 560.0
+
+[node name="Label" type="Label" parent="CanvasLayer/Button"]
+layout_mode = 0
+offset_right = 349.0
+offset_bottom = 96.0
+text = "Back To Home"
+label_settings = SubResource("LabelSettings_eqex4")
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://q6ehejp1ibd3"]
+
+[ext_resource type="Script" path="res://scripts/boots.gd" id="1_lb8fl"]
+[ext_resource type="Texture2D" uid="uid://bfdmtcscdvkvy" path="res://assets/images/boots.png" id="1_yvqcg"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_e8g4v"]
+radius = 32.0
+
+[node name="Boots" type="Area2D"]
+script = ExtResource("1_lb8fl")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-5, 0)
+shape = SubResource("CircleShape2D_e8g4v")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(-7, -5)
+scale = Vector2(1.825, 1.825)
+texture = ExtResource("1_yvqcg")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
