@@ -23,6 +23,8 @@ var game_data = {
 func _ready() -> void:
 	print("ready")
 	game_data["stage"] = GameState.PLAYING
+	$CanvasLayer/Line2D.visible = true
+	$CanvasLayer/Hero.visible = true
 	# 一开始还看不到结束标志
 	$CanvasLayer/GameOverFrame.visible = false
 	pass
@@ -55,8 +57,11 @@ func game_over(dead_position: Vector2):
 	canvas.add_child(explode)
 	
 	$Sounds/Collide.play()
+	$Sounds/Fail.play()
 	
 	_clear_all_entity()
+	$CanvasLayer/Line2D.visible = false
+	$CanvasLayer/Hero.visible = false
 	# 显示结束画面
 	$CanvasLayer/GameOverFrame.visible = true
 
@@ -79,6 +84,8 @@ func collect_part(collect_position: Vector2):
 
 func add_speed(collect_position: Vector2):
 	print("add_speed!")
+	$Sounds/SpeedUp.pitch_scale = randf_range(0.6, 1.5)
+	$Sounds/SpeedUp.play()
 	hero.speed_size += 1
 
 func generate_stone():

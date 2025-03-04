@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://7v0hent0n3x4"]
+[gd_scene load_steps=6 format=3 uid="uid://7v0hent0n3x4"]
 
 [ext_resource type="FontFile" uid="uid://4eu5c4eagiw8" path="res://assets/fonts/BRADHITC.TTF" id="1_wrtuy"]
 [ext_resource type="Script" path="res://scripts/win_button.gd" id="2_wlsiq"]
+[ext_resource type="AudioStream" uid="uid://d1cb5lywy47ij" path="res://assets/sounds/holy_win.mp3" id="3_211p2"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_2j25f"]
 font = ExtResource("1_wrtuy")
@@ -46,5 +47,9 @@ text = "Back To Home"
 label_settings = SubResource("LabelSettings_eqex4")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Win" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_211p2")
+autoplay = true
 
 [connection signal="pressed" from="CanvasLayer/Button" to="CanvasLayer/Button" method="_on_pressed"]
